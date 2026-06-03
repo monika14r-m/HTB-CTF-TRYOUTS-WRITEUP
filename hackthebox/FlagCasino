@@ -1,0 +1,42 @@
+# FlagCasino
+
+First reversing challenge I solved on HTB.
+
+## What I noticed
+
+Running `strings` on the binary showed some interesting things:
+
+```text
+main
+check
+rand
+srand
+WELCOME TO ROBO CASINO
+CORRECT
+INCORRECT
+```
+
+At this point I had no clue what was going on, but seeing `rand()` and `srand()` felt important.
+
+## Investigation
+
+The binary appeared to generate random values and compare them against values stored internally.
+
+After looking at the logic, I learned that the program was seeding the random number generator with flag characters and then checking the generated output.
+
+Since pseudo-random generators are deterministic, the same seed always produces the same output.
+
+That means the hidden characters could be recovered by reproducing the same process.
+
+## What I Learned
+
+* ELF binaries are Linux executables.
+* `strings` can reveal useful clues.
+* `rand()` is predictable when the seed is known.
+* Reverse engineering is mostly figuring out what a program is doing step by step.
+
+## Flag
+
+```text
+HTB{r4nd_1s_v3ry_pr3d1ct4bl3}
+```
